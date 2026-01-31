@@ -38,7 +38,8 @@ export default function NoteDetailsClient({ id }: Props) {
       <button onClick={handleGoBack}>Back</button>
       <h2>{data.title}</h2>
       <p>{data.content}</p>
-      <p>{new Date(data.createdAt).toLocaleString()}</p>
+      <p>Created: {data.createdAt}</p>
+<p>Updated: {data.updatedAt}</p>
     </div>
   );
 }

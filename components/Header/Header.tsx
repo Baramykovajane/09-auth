@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import css from "@/styles/Header.module.css";
-
 import AuthNavigation from "@/components/AuthNavigation/AuthNavigation";
 import { checkSession } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
@@ -17,9 +16,9 @@ const Header = () => {
     const initAuth = async () => {
       try {
         const user = await checkSession();
-        if (user) {
-          setUser(user);
-        }
+if (user && typeof user !== "boolean") {
+  setUser(user);
+}
       } catch {
         // якщо не залогінений — просто ігноруємо
       }

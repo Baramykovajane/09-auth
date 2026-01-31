@@ -1,49 +1,42 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { checkSession } from "@/lib/api/clientApi";
+import { useEffect } from "react";
+
 import { useAuthStore } from "@/lib/store/authStore";
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
+import { checkSession, getMe } from "@/lib/api/clientApi";
 
-export default function AuthProvider({ children }: AuthProviderProps) {
-  const { user, setUser, clearIsAuthenticated } = useAuthStore();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [loading, setLoading] = useState(true);
+type Props = {
+  children: React.ReactNode;
+};
 
-  const privateRoutes = ["/profile", "/notes"];
-  const isPrivateRoute = privateRoutes.some(route => pathname.startsWith(route));
+function AuthProvider({ children }: Props) {
+  const setUser = useAuthStore((state) => state.setUser);
+  const clearIsAuthenticated = useAuthStore(
+    (state) => state.clearIsAuthenticated,
+  );
 
   useEffect(() => {
-    const verifySession = async () => {
-      if (user) {
-        setLoading(false);
-        return;
-      }
+    const fetchUser = async () => {
+      const isAuthenticated = await checkSession();
 
-      try {
-        const me = await checkSession(); 
-        if (me) {
-          setUser(me); 
-        } else if (isPrivateRoute) {
-          router.replace("/sign-in");
+      if (isAuthenticated) {
+        const user = await getMe();
+
+        if (user) {
+          setUser(user);
+        } else {
+          clearIsAuthenticated();
         }
-      } catch {
+      } else {
         clearIsAuthenticated();
-        if (isPrivateRoute) router.replace("/sign-in");
-      } finally {
-        setLoading(false);
       }
     };
 
-    verifySession();
-  }, [user, setUser, clearIsAuthenticated, isPrivateRoute, router]);
+    fetchUser();
+  }, [setUser, clearIsAuthenticated]);
 
-  if (loading) return <div style={{ textAlign: "center", marginTop: "2rem" }}>Loading...</div>;
-
-  return <>{children}</>;
+  return children;
 }
+
+export default AuthProvider;
