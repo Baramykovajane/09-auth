@@ -13,3 +13,31 @@ export interface Note {
   createdAt: string; 
   updatedAt: string; 
 }
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+export interface NotesResponse {
+  notes: Note[];
+  totalPages: number;
+  page: number;
+}
+export interface FetchNotesParams {
+  page: number;
+  perPage: number;
+  search?: string;
+  tag?: string;
+}
+
+export interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
+export interface CreateNotePayload {
+  title: string;
+  content: string;
+  tag: NoteTag;
+}
