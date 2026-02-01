@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import type { User } from "@/types/auth";
+import type { User } from "@/types/user";
 import css from "@/styles/EditProfilePage.module.css";
 import { getMe, updateMe } from "@/lib/api/clientApi";
 
