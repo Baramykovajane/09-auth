@@ -10,7 +10,7 @@ import type {
   RegisterRequest,
   LoginRequest,
   User,
-} from "@/types/auth"
+} from "@/types/user"
 /* -------- NOTES -------- */
 
 export const fetchNotes = async ({

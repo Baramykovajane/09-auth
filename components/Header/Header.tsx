@@ -20,7 +20,7 @@ if (user && typeof user !== "boolean") {
   setUser(user);
 }
       } catch {
-        // якщо не залогінений — просто ігноруємо
+        
       }
     };
 

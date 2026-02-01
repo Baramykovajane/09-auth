@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import type { FetchNotesResponse, FetchNotesParams } from "@/types/note";
-import { User } from "@/types/auth";
+import { User } from "@/types/user";
 
 const createServerApi = async () => {
   const cookieStore = await cookies();
