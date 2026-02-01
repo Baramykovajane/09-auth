@@ -1,11 +1,7 @@
-import axios from 'axios';
 
-const baseURL =
-  process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}/api` 
-    : 'http://localhost:3000/api';           
+import axios from "axios";
 
 export const nextServer = axios.create({
-  baseURL,
+  baseURL: "/api",
   withCredentials: true,
 });
