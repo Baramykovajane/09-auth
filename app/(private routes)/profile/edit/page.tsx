@@ -6,11 +6,13 @@ import Image from "next/image";
 import type { User } from "@/types/user";
 import css from "@/styles/EditProfilePage.module.css";
 import { getMe, updateMe } from "@/lib/api/clientApi";
+import { useAuthStore } from "@/lib/store/authStore";
 
 export default function EditProfilePage() {
   const router = useRouter();
+  const { setUser } = useAuthStore(); 
 
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setLocalUser] = useState<User | null>(null);
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -19,26 +21,28 @@ export default function EditProfilePage() {
     const fetchUser = async () => {
       try {
         const data = await getMe();
-        setUser(data);
+        setLocalUser(data);
         setUsername(data.username);
+        setUser(data); // синхронізація глобального стану з сервером
       } catch (err) {
         console.error("Failed to fetch user", err);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [setUser]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!user) return;
 
     setIsSaving(true);
     setError("");
 
     try {
-      await updateMe({ username: username });
+      const updatedUser = await updateMe({ username });
+      setLocalUser(updatedUser);
+      setUser(updatedUser); 
       router.push("/profile");
     } catch (err) {
       console.error("Update failed", err);

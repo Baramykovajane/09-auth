@@ -7,12 +7,19 @@ import type {
   CreateNotePayload,
 } from "@/types/note";
 import type {
-  RegisterRequest,
-  LoginRequest,
   User,
 } from "@/types/user"
 /* -------- NOTES -------- */
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  username?: string; 
+}
 
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
 export const fetchNotes = async ({
   page,
   perPage,
@@ -79,12 +86,10 @@ export async function getMe() {
   return data;
 }
 
-export const updateMe = async (payload: { username?: string; avatar?: string }) => {
-  const backendPayload = {
-    username: payload.username, 
-    avatar: payload.avatar,   
-  };
+export const updateMe = async (payload: { username?: string }): Promise<User> => {
+  const { data } = await nextServer.patch<User>("/users/me", {
+    username: payload.username,
+  });
 
-  const { data } = await nextServer.patch("/users/me", backendPayload);
   return data;
 };

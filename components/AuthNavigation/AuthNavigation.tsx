@@ -10,16 +10,17 @@ export default function AuthNavigation() {
   const { isAuthenticated, user, clearIsAuthenticated } = useAuthStore();
   const router = useRouter();
 
- const handleLogout = async () => {
-  try {
-    await logout();
-    clearIsAuthenticated();
-    router.push("/sign-up");
-    router.refresh();
-  } catch (e) {
-    console.error("Logout failed", e);
-  }
-};
+  const handleLogout = async () => {
+    try {
+      await logout();
+      clearIsAuthenticated();
+      router.push("/sign-in"); 
+      router.refresh();
+    } catch (e) {
+      console.error("Logout failed", e);
+    }
+  };
+
   return (
     <ul className={css.navigation}>
       {isAuthenticated ? (
